@@ -1,0 +1,31 @@
+{% extends 'application/base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        {% for billet in billets %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2>{{ billet.evenement.titre }}</h2>
+                    <p>{{ billet.evenement.date }} A retenir</p>
+                    <p>{{ billet.evenement.prix_ticket }}</p>
+                    <p>{{ billet.quantite }} dans le panier</p>
+                    <form action="{% url 'add_to_cart' billet.evenement.id %}" method="POST" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                    </form>
+                    <form action="{% url 'remove_from_cart' billet.evenement.id %}" method="POST" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-secondary">Diminuer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <p><strong>Total du panier: {{ cart_total }} F CFA</strong></p>
+        <a href="{% url 'delete_cart' %}" class="btn btn-danger" style="margin-top:20px; margin-right:10px; width:200px">Supprimer le panier</a>
+        <a href="{% url 'delete_cart' %}" class="btn btn-primary" style="margin-top:20px; width:200px">Valider le paiement</a>
+        
+    </div>
+</div>
+{% endblock %}

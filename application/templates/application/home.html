@@ -1,0 +1,37 @@
+{% extends 'application/base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        {% for evenement in evenements %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    {% if evenement.thumbnail %}
+                    <img class="card-img-top" src="{{ evenement.thumbnail.url }}" alt="Card image cap" style="max-width: 250px;">
+                    {% endif %}
+                    <h5 class="card-title">{{ evenement.titre }}</h5>
+                   
+
+                    <p class="card-text" style="font-size:25px; font-family:Fantasy">{{ evenement.prix_ticket }}</p>
+
+                    <p class="card-text" style="font-size:25px">{{ evenement.location }}</p>
+                    <a href="{% url 'evenement_detail' evenement.id %}" class="btn btn-primary">Détails de l'événement</a>
+                    <p href="{{ user }}"></p>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+<!-- Ajoutez les liens vers les CDN de Bootstrap et jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"></script>
+{% endblock scripts %}

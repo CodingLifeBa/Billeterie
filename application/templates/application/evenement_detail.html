@@ -1,0 +1,43 @@
+{% extends 'application/base.html' %}
+
+{% block content %}
+<div class="card" style="width: 18rem; margin-top:10px">
+    <div class="card-body">
+        <h2>{{ evenement.titre }}</h2>
+        <img class="card-img-top" src="{{ evenement.thumbnail.url }}" alt="Card image cap" style="max-width: 250px;">
+
+        <p>{{ evenement.description }}</p>
+        <p>Date: {{ evenement.date }}</p>
+        <p>Lieu: {{ evenement.location }}</p>
+        <p>Stock: {{evenement.stock}}</p>
+    </div>
+</div>
+<form id="cartForm" method="POST" action="{% url 'add_to_cart' evenement.id %}">
+    {% if user.is_authenticated %}
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary" id="addToCartBtn">Acheter des billets</button>
+    {% endif %}
+
+   
+</form>
+{% if not user.is_authenticated %}
+<a type="submit" class="btn btn-primary"  href="{% url 'login' %}">Se Connecter</a>
+<a type="submit" class="btn btn-primary" href="{% url 'signup' %}">S'inscrire</a>
+{% endif %}
+
+{% endblock content %}
+
+{% block scripts %}
+<!-- Ajouter du JavaScript pour une meilleure expérience utilisateur -->
+<script>
+ 
+    document.getElementById("addToCartBtn").addEventListener("click", function() {
+        this.classList.add("btn-clicked");
+    });
+
+    // Ajouter une classe pour changer le style du formulaire
+    document.getElementById("cartForm").addEventListener("submit", function() {
+        this.classList.add("form-submitted");
+    });
+</script>
+{% endblock scripts %}

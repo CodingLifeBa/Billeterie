@@ -1,0 +1,10 @@
+{% extends 'application/base.html' %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" href="" value="Ajouter">
+</form>
+
+{% endblock %}
