@@ -9,6 +9,7 @@
             <div class="card">
                 <div class="card-body">
                     {% if evenement.thumbnail %}
+                    
                     <img class="card-img-top" src="{{ evenement.thumbnail.url }}" alt="Card image cap" style="max-width: 250px;">
                     {% endif %}
                     <h5 class="card-title">{{ evenement.titre }}</h5>
@@ -18,7 +19,7 @@
 
                     <p class="card-text" style="font-size:25px">{{ evenement.location }}</p>
                     <a href="{% url 'evenement_detail' evenement.id %}" class="btn btn-primary">Détails de l'événement</a>
-                    <p href="{{ user }}"></p>
+                
 
                 </div>
             </div>

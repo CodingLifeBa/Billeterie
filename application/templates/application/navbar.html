@@ -42,7 +42,7 @@
               </li>
             {% endif %}
 
-            {% if user.cart %}
+            {% if user.is_authenticated %}
             <div class="dropdown">
               <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                 Espace Vendeur
@@ -50,7 +50,7 @@
             
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <li><a class="dropdown-item" href="{% url 'ajouter_evenement' %}">Ajouter un Evenement</a></li>
-                <li><a class="dropdown-item" href="#">Liste des evenements</a></li>
+                <li><a class="dropdown-item" href="{% url 'list_evenement' %}">Liste des evenements</a></li>
               </ul>
             </div>
             {% endif %}

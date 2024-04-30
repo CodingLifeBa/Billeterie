@@ -7,6 +7,7 @@ from django.template import loader
 import datetime
 from django.utils import timezone
 from django.db.models import Sum
+from django.contrib import messages
 # Create your views here.
 
 
@@ -79,13 +80,15 @@ def delete_cart(request):
 
 @login_required
 def ajouter_evenement(request):
+    vendeur = Vendeur.objects.get(user=request.user) 
     if request.method == 'POST':
         form = EvenementForm(request.POST, request.FILES)
         if form.is_valid():
             evenement = form.save(commit=False)
-            evenement.vendeur = request.user
+            evenement.vendeurs.add(vendeur)
             evenement.save()
-            return redirect('home') 
+            messages.success(request, "Événement ajouté avec succès!")
+            return redirect('list_evenement') 
     else:
         form = EvenementForm()  
     return render(request, 'application/ajouter_evenement.html', {'form': form})
@@ -95,9 +98,51 @@ def ajouter_evenement(request):
 
 
 
-
+@login_required
 def list_evenement(request):
-    return render(request, "application/list_evenement.html", {'list': list})
+    evenements = Evenement.objects.filter(user=request.user) 
+    return render(request, "application/list_evenement.html", {'evenements': evenements})
+
+
+@login_required
+def modifier_evenement(request, id):
+    evenement = get_object_or_404(Evenement, id=id)
+    vendeur = Vendeur.objects.get(user=request.user)
+    if vendeur not in evenement.vendeurs.all():
+
+        messages.error(request,"Vous navez pas le droit de modifier")
+        return redirect('list_evenement')
+        if request.method == 'POST':
+            form = EvenementForm(request.POST, request.FILES, instance=evenement)
+            if form.is_valid():
+                form.save()
+
+                return redirect('list_evenement')
+        else:
+            form = EvenementForm(instance=evenement)
+    return render(request, 'application/modifier_evenement.html', {'form': form})
+
+@login_required
+def supprimer_evenement(request, id):
+    evenement = get_object_or_404(Evenement, id=id)
+    if request.method == 'POST':
+        evenement.delete()
+        return redirect('list_evenement')
+    return render(request, 'application/supprimer_evenement.html', {'evenement': evenement})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -107,7 +152,4 @@ def cart_total(request):
 
     cart = get_object_or_404(Cart, user=request.user)
     total = sum(Billet.evenement.prix_ticket * Billet.quantite for billet in cart.billets.all())
-    return render(request, 'application/cart.html', {'total': total})
-
-
-
+    return render(request, 'application/cart.html', {'total': total, 'billets': cart.billets.all()})

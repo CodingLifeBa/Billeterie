@@ -14,13 +14,20 @@ class Evenement(models.Model):
     prix_ticket = models.DecimalField(max_digits=10, decimal_places=0)
     stock=models.IntegerField(default=0)
     thumbnail=models.ImageField(upload_to="products",blank=True,null=True)
-    #user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    #vendeur=models.ForeignKey("Vendeur",on_delete=models.CASCADE,related_name="evenements")
 
-#(Order) Article
+    class Meta:
+        verbose_name = "Evenement"
+        verbose_name_plural="Evenements"
+
+    def __str__(self):
+        return self.titre
+
+
 class Billet(models.Model):
 
-    user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    evenement = models.ForeignKey(Evenement, on_delete=models.CASCADE)
+    user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name="billets")
+    evenement = models.ForeignKey(Evenement, on_delete=models.CASCADE,related_name="billets")
     #quantite = models.PositiveIntegerField(blank=True, null=True)
     quantite = models.PositiveIntegerField(default=1)
 
@@ -28,6 +35,10 @@ class Billet(models.Model):
     ordered=models.BooleanField(default=False)
     ordered_date=models.DateTimeField(blank=True, null=True)
 
+
+    class Meta:
+        verbose_name = "Billet"
+        verbose_name_plural="Billets"
 
     def __str__(self):
         return f"{self.evenement.titre} ({self.quantite})"
@@ -37,10 +48,12 @@ class Billet(models.Model):
 class Cart(models.Model):
     user=models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     #articles    
-    billets=models.ManyToManyField(Billet)
+    billets=models.ManyToManyField(Billet, related_name="carts")
     #Commande ou non
    
- 
+    class Meta:
+        verbose_name = "Cart"
+        verbose_name_plural="Carts"
 
     def __str__(self):
         return  self.user.username
@@ -60,9 +73,12 @@ class Cart(models.Model):
 
 
     
-    def total(self):
 
+    def cart_total(self):
+    
         total = 0
         for billet in self.billets.all():
-            total += self.prix_ticket * self.quantite
+            total += billet.evenement.prix_ticket * billet_quantite
+            total += billet.evenement.prix_ticket * billet
         return total
+

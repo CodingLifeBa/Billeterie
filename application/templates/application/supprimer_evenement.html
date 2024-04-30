@@ -1,0 +1,11 @@
+{% extends 'application/base.html' %}
+
+{% block content %}
+<p>Voulez-vous vraiment supprimer l'événement "{{ evenement.nom }}" ?</p>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Oui</button>
+  <a href="{% url 'list_evenement' %}">Non</a>
+</form>
+
+{% endblock content %}

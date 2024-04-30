@@ -4,22 +4,18 @@
 
 <div class="container">
     <div class="row">
-        <button class="" href="{% url 'ajouter_evenement' %}">Ajouter un Evenement</a></button>
-
+        
+        
         {% for evenement in evenements %}
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <img class="card-img-top" src="{{ evenement.user.thumbnail.url }}" alt="Card image cap" style="max-width: 250px;">
-
-                    <h5 class="card-title">{{ evenement.user.titre }}</h5>
-                    <p class="card-text">{{ evenement.user.description }}</p>
-
-                   
-                </div>
-            </div>
+        <div>
+          <h2>{{ evenement.nom }}</h2>
+          <p>{{ evenement.description }}</p>
+          <p>{{ evenement.date }}</p>
+          <a href="{% url 'modifier_evenement' evenement.id %}">Modifier</a>
+          <a href="{% url 'supprimer_evenement' evenement.id %}">Supprimer</a>
         </div>
-        {% endfor %}
+      {% endfor %}
+        
     </div>
 </div>
 
