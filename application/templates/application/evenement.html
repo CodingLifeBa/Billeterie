@@ -1,18 +1,10 @@
 {% extends 'application/base.html' %}
 
 {% block content %}
-<form method="GET" action=".">
-    <input type="text" name="query" placeholder="Recherche..." value="{{ request.GET.query }}">
-    <select name="category">
-        <option value="">Toutes les catégories</option>
-        {% for categorie in categories %}
-        <option value="{{ categorie.nom }}" {% if request.GET.category == categorie.nom %}selected{% endif %}>{{ categorie.titre }}</option>
-      {% endfor %}
-    </select>
-    <button type="submit">Rechercher</button>
-</form>
+
 
 <div class="container">
+    <h1>Les Evenements</h1>
     <div class="row">
         {% for evenement in evenements %}
         <div class="col-md-4 mb-4">
@@ -24,12 +16,10 @@
                     {% endif %}
                     <h5 class="card-title">{{ evenement.titre }}</h5>
                    
-                    <p class="card-text" style="font-size:17px">
-                        <i class="fas fa-map-marker-alt"></i>  <!-- Ajout de l'icône -->
-                        {{ evenement.location }}
-                    </p>
-                    <p>{{ evenement.description |truncatewords:20}}</p>
 
+                    <p class="card-text" style="font-size:25px; font-family:Fantasy">{{ evenement.prix_ticket }} F cfa</p>
+
+                    <p class="card-text" style="font-size:25px">{{ evenement.location }}</p>
                     <a href="{% url 'evenement_detail' evenement.id %}" class="btn btn-primary">Détails de l'événement</a>
                 
 
@@ -42,3 +32,9 @@
 
 {% endblock content %}
 
+{% block scripts %}
+<!-- Ajoutez les liens vers les CDN de Bootstrap et jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"></script>
+{% endblock scripts %}

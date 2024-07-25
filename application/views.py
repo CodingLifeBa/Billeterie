@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Evenement, Cart, Billet
-from .forms import EvenementForm
+from .forms import EvenementForm,Update
 from django.urls import reverse
 from django.template import loader
 import datetime
@@ -11,9 +11,18 @@ from django.contrib import messages
 # Create your views here.
 
 
+def search(request):
+    return render(request,"search.html")
+
+    
 def home(request):
     upcoming_evenements = Evenement.objects.filter(date__gte=timezone.now())
     return render(request, "application/home.html", {'evenements': upcoming_evenements})
+
+
+def evenement(request):
+    evenements = Evenement.objects.all()
+    return render(request, 'application/evenement.html', {'evenements': evenements})
 
 def evenement_detail(request, id):
     evenement = get_object_or_404(Evenement, id=id)
@@ -80,46 +89,44 @@ def delete_cart(request):
 
 @login_required
 def ajouter_evenement(request):
-    vendeur = Vendeur.objects.get(user=request.user) 
+    user = request.user  # The logged-in user is already available via request.user
     if request.method == 'POST':
         form = EvenementForm(request.POST, request.FILES)
         if form.is_valid():
             evenement = form.save(commit=False)
-            evenement.vendeurs.add(vendeur)
-            evenement.save()
+            evenement.save()  # Save the event first before adding users to it
+            evenement.user.add(user)  
             messages.success(request, "Événement ajouté avec succès!")
-            return redirect('list_evenement') 
+            return redirect('list_evenement')  # Ensure 'list_evenement' is a valid URL name
     else:
-        form = EvenementForm()  
+        form = EvenementForm()  # Initialize an empty form for GET requests
+
     return render(request, 'application/ajouter_evenement.html', {'form': form})
-
-
-
 
 
 
 @login_required
 def list_evenement(request):
-    evenements = Evenement.objects.filter(user=request.user) 
+    evenements = Evenement.objects.filter(user=request.user)  
     return render(request, "application/list_evenement.html", {'evenements': evenements})
+
+
 
 
 @login_required
 def modifier_evenement(request, id):
     evenement = get_object_or_404(Evenement, id=id)
-    vendeur = Vendeur.objects.get(user=request.user)
-    if vendeur not in evenement.vendeurs.all():
 
-        messages.error(request,"Vous navez pas le droit de modifier")
-        return redirect('list_evenement')
-        if request.method == 'POST':
-            form = EvenementForm(request.POST, request.FILES, instance=evenement)
-            if form.is_valid():
-                form.save()
+    
+    if request.method == 'POST':
+        form = Update(request.POST, request.FILES, instance=evenement)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Événement modifié avec succès!")
+            return redirect('list_evenement')
+    else:
+        form = Update(instance=evenement)
 
-                return redirect('list_evenement')
-        else:
-            form = EvenementForm(instance=evenement)
     return render(request, 'application/modifier_evenement.html', {'form': form})
 
 @login_required

@@ -7,9 +7,9 @@
             <div class="card">
                 <div class="card-body">
                     <h2>{{ billet.evenement.titre }}</h2>
-                   
+                    <img class="card-img-top" src="{{ billet.evenement.thumbnail.url }}" alt="Card image cap" style="max-width: 250px;">  
                     <p>{{ billet.evenement.date }} A retenir</p>
-                    <p class="prix_ticket">{{ billet.evenement.prix_ticket }}</p>
+                    <p class="prix_ticket">{{ billet.evenement.prix_ticket }} F cfa</p>
                     <p class="quantite">{{ billet.quantite }} dans le panier</p>
                     <form action="{% url 'add_to_cart' billet.evenement.id %}" method="POST" style="display: inline;">
                         {% csrf_token %}

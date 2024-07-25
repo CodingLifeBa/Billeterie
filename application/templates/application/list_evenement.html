@@ -4,18 +4,38 @@
 
 <div class="container">
     <div class="row">
-        
-        
+      <div>
+        <table class="table">
+       <thead>
+        <tr>
+          <th>Id</th>
+          <th>Titre</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
         {% for evenement in evenements %}
-        <div>
-          <h2>{{ evenement.nom }}</h2>
-          <p>{{ evenement.description }}</p>
-          <p>{{ evenement.date }}</p>
-          <a href="{% url 'modifier_evenement' evenement.id %}">Modifier</a>
-          <a href="{% url 'supprimer_evenement' evenement.id %}">Supprimer</a>
-        </div>
-      {% endfor %}
         
+          <tr>
+           <td>
+          <h2>{{ evenement.id }}</h2></td> 
+        <td> 
+          <h2>{{ evenement.titre }}</h2></td> 
+        <td> 
+          <h2>{{ evenement.date }}</h2></td> 
+
+        <td> 
+          <button onclick="window.location='{% url 'modifier_evenement' evenement.id %}'">Modifier</button>
+          <button onclick="window.location='{% url 'supprimer_evenement' evenement.id %}'">Supprimer</button>
+          
+        </td> 
+      </tr>
+        
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
     </div>
 </div>
 

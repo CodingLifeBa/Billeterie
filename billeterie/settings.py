@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'application',
-    'accounts'
+    'accounts',
+  
 ]
 
 MIDDLEWARE = [
@@ -78,10 +79,10 @@ WSGI_APPLICATION = 'billeterie.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'billeteries',
+        'NAME': 'devoir',
         'HOST':'localhost',
         'USER':'postgres',
-        'PASSWORD':'banlieusale',
+        'PASSWORD':'bqnlieusqle',
         'PORT':5432
     }
 }

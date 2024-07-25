@@ -7,6 +7,9 @@ from accounts.views import logout_user
 urlpatterns = [
     
     path('', views.home, name='home'),
+
+    path('evenement/', views.evenement, name="evenement" ),
+    path('search/', views.search, name="search" ),
     path('application/signup/', signup, name="signup" ),
     path('application/logout/',logout_user, name="logout"),
     path('accounts/login/',login_user, name="login"),

@@ -4,25 +4,32 @@ from django.conf import settings
 from django.utils import timezone
 
 
+class Categorie(models.Model):
+    nom = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nom
 
 # Create your models here.
 class Evenement(models.Model):
+
+    user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='evenements', null=True, blank=True)
+
     titre = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     date = models.DateTimeField()
     location = models.CharField(max_length=100)
     prix_ticket = models.DecimalField(max_digits=10, decimal_places=0)
     stock=models.IntegerField(default=0)
-    thumbnail=models.ImageField(upload_to="products",blank=True,null=True)
-    #vendeur=models.ForeignKey("Vendeur",on_delete=models.CASCADE,related_name="evenements")
+    thumbnail=models.ImageField(upload_to="products",blank=True,null=True) 
 
+    categorie = models.ForeignKey('Categorie', on_delete=models.CASCADE, default=1)
     class Meta:
         verbose_name = "Evenement"
-        verbose_name_plural="Evenements"
+        verbose_name_plural = "Evenements"
 
     def __str__(self):
-        return self.titre
-
+        return f"{self.titre} ({self.categorie.nom})"
 
 class Billet(models.Model):
 
@@ -81,4 +88,3 @@ class Cart(models.Model):
             total += billet.evenement.prix_ticket * billet_quantite
             total += billet.evenement.prix_ticket * billet
         return total
-
